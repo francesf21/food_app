@@ -1,0 +1,42 @@
+name: food_app
+description: Proyecto final de certus.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.6 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  google_fonts: ^3.0.1
+  provider: ^6.0.5
+  image_picker: ^0.8.6
+  supabase_flutter: ^1.2.2
+  font_awesome_flutter: ^10.3.0
+  http: ^0.13.5
+  shared_preferences: ^2.0.16
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.11.0
+
+  flutter_lints: ^2.0.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icon_launcherf.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/images/
