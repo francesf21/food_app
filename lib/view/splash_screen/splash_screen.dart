@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/res/components/error_component.dart';
 import 'package:provider/provider.dart';
 
 import 'package:food_app/res/res.dart';
@@ -40,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Consumer<SplashViewModel>(
         builder: (_, value, __) {
           switch (value.statusSplash.status) {
-            case Status.loading:
+            case Status.error:
               return const _ComponentSplash();
             case Status.completed:
               if (value.statusSplash.data!) {
@@ -50,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 executeAfterBuild(RoutesName.onboard);
                 return Container();
               }
-            case Status.error:
+            case Status.loading:
               return const _ComponentSplash();
             default:
               return const _ComponentSplash();
@@ -90,7 +91,7 @@ class _ComponentSplash extends StatelessWidget {
                 backgroundColor: AppColors.primaryColor,
                 color: AppColors.backgroundColor,
               ),
-            )
+            ),
           ],
         ),
       ),
