@@ -46,6 +46,16 @@ class AuthRepository {
     }
   }
 
+  Future<bool> signOut() async {
+    try {
+      await supabase.auth.signOut();
+      prefs.setTokenApp = "";
+      return true;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> forgotPassword({required String email}) async {
     try {
       await supabase.auth.resetPasswordForEmail(email);
