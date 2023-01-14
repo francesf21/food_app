@@ -34,22 +34,17 @@ class AuthRepository {
         },
       );
 
+  Future<void> forgotPassword({
+    required String email,
+  }) async =>
+      await supabase.auth.resetPasswordForEmail(email);
+
   Future<void> signOut() async {
     try {
       await supabase.auth.signOut();
       prefs.setTokenApp = "";
     } catch (e) {
       rethrow;
-    }
-  }
-
-  Future<void> forgotPassword({required String email}) async {
-    try {
-      await supabase.auth.resetPasswordForEmail(email);
-    } on AuthException catch (error) {
-      print("Error en el metodo forgotPassword $error");
-    } catch (e) {
-      print("Error en el metodo forgotPassword $e");
     }
   }
 }
