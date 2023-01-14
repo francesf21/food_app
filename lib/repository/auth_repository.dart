@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthRepository {
   Future<bool> redirect() async {
     try {
+      prefs.setTokenApp = supabase.auth.currentSession?.accessToken ?? "";
       return supabase.auth.currentSession != null;
     } catch (e) {
       rethrow;
@@ -14,43 +15,29 @@ class AuthRepository {
   Future<AuthResponse> singInWithPassword({
     required String email,
     required String password,
-  }) async {
-    try {
-      final response = await supabase.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
-
-      prefs.setTokenApp = response.session!.accessToken;
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  }) async =>
+      await supabase.auth
+          .signInWithPassword(email: email, password: password)
+          .then((value) {
+        prefs.setTokenApp = value.session!.accessToken;
+        return value;
+      });
 
   Future<AuthResponse> signUpUser({
-    required String name,
     required String email,
     required String password,
-  }) async {
-    try {
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
+  }) async =>
+      await supabase.auth.signUp(email: email, password: password).then(
+        (value) {
+          prefs.setTokenApp = value.session!.accessToken;
+          return value;
+        },
       );
 
-      prefs.setTokenApp = response.session!.accessToken;
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<bool> signOut() async {
+  Future<void> signOut() async {
     try {
       await supabase.auth.signOut();
       prefs.setTokenApp = "";
-      return true;
     } catch (e) {
       rethrow;
     }

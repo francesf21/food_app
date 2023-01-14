@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_app/routes/routes.dart';
+import 'package:provider/provider.dart';
+
 import 'package:food_app/data/response/status.dart';
 import 'package:food_app/models/profile.dart';
-import 'package:food_app/res/components/app_text.dart';
 import 'package:food_app/res/components/components.dart';
-import 'package:food_app/res/components/error_component.dart';
 import 'package:food_app/res/res.dart';
 import 'package:food_app/view_models/profile_view_model.dart';
-import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -36,7 +36,10 @@ class _ProfilePageState extends State<ProfilePage> {
             case Status.loading:
               return const LoadingWidget();
             case Status.completed:
-              return _ComponentProfile(profile: value.userProfile.data!);
+              return _ComponentProfile(
+                profile: value.userProfile.data!,
+                viewModel: _viewModel,
+              );
             case Status.error:
               return const ErrorComponent(
                 icon: FontAwesomeIcons.userXmark,
@@ -56,33 +59,36 @@ class _ProfilePageState extends State<ProfilePage> {
 
 class _ComponentProfile extends StatelessWidget {
   final Profiles profile;
+  final ProfileViewModel viewModel;
 
   const _ComponentProfile({
     Key? key,
     required this.profile,
+    required this.viewModel,
   }) : super(key: key);
 
   Future<void> _showMyDialog(BuildContext context) async {
-    final ProfileViewModel _viweModel = ProfileViewModel();
-
     return showDialog<void>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Cerrar Sesion'),
-        content: Text("¿Estas seguro que deseas cerrar sesion?"),
+        title: const Text('Cerrar Sesión'),
+        content: const Text("¿Estas seguro que deseas cerrar sesión?"),
         actions: <Widget>[
           TextButton(
-              child: Text(
+              child: const Text(
                 "Aceptar",
                 style: TextStyle(
                   color: AppColors.primaryColor,
                 ),
               ),
               onPressed: () {
-                _viweModel.signOut();
+                viewModel.signOut();
+                Navigator.of(context).pushNamed(
+                  RoutesName.login,
+                );
               }),
           TextButton(
-              child: Text(
+              child: const Text(
                 "Cancelar",
                 style: TextStyle(
                   color: AppColors.primaryColor,
@@ -203,59 +209,6 @@ class _ComponentProfile extends StatelessWidget {
             },
           )
         ],
-      ),
-    );
-  }
-}
-
-class ItemButtonProfile extends StatelessWidget {
-  final String text;
-  final IconData icon;
-  final void Function()? onTap;
-
-  const ItemButtonProfile({
-    Key? key,
-    required this.text,
-    required this.icon,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimens.d24,
-        vertical: Dimens.d6,
-      ),
-      child: SizedBox(
-        width: double.infinity,
-        height: 70,
-        child: Card(
-          elevation: Dimens.d8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Dimens.d16),
-          ),
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(Dimens.d16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    text,
-                    textAlign: TextAlign.start,
-                    style: AppStyle.instance.bodyMediumBlack,
-                  ),
-                  Icon(
-                    icon,
-                    color: AppColors.blackColor,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

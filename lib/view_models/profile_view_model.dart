@@ -13,15 +13,9 @@ class ProfileViewModel with ChangeNotifier {
   final _authRepository = AuthRepository();
 
   ApiResponse<Profiles> userProfile = ApiResponse.initial();
-  ApiResponse<bool> signOutUser = ApiResponse.loading();
 
   setProfile(ApiResponse<Profiles> response) {
     userProfile = response;
-    notifyListeners();
-  }
-
-  setSignOut(ApiResponse<bool> response) {
-    signOutUser = response;
     notifyListeners();
   }
 
@@ -73,10 +67,6 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut().then((value) {
-      setSignOut(ApiResponse.completed(value));
-    }).onError((error, stackTrace) => setSignOut(
-          ApiResponse.error(error.toString()),
-        ));
+    await _authRepository.signOut();
   }
 }
