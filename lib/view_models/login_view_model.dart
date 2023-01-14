@@ -19,12 +19,25 @@ class LoginViewModel with ChangeNotifier {
     required String password,
   }) async {
     setInitSesion(ApiResponse.loading());
-    await _authRepository
+    _authRepository
         .singInWithPassword(email: email, password: password)
         .then((value) {
       setInitSesion(ApiResponse.completed(value));
-    }).onError((error, stackTrace) => setInitSesion(
-              ApiResponse.error(error.toString()),
+    }).onError((error, _) => setInitSesion(
+              ApiResponse.error(returnResponse(error as AuthException)),
             ));
+  }
+
+  dynamic returnResponse(AuthException response) {
+    switch (response.statusCode) {
+      case "400":
+        return "Error, Usuario y/o contraseña incorrecto";
+      case "404":
+        return "Usuario ya registrado, por favor inicie sesión";
+      case "500":
+        return "Usuario ya registrado, por favor inicie sesión";
+      default:
+        return "Error en la comunicación, intente más tarde";
+    }
   }
 }

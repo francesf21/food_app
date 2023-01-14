@@ -7,7 +7,7 @@ class AppString {
   final String textAppName = "Rapi Food";
   final String textTileOnboard = "Comida para \ntodos";
   final String textButtonOnboard = "Empecemos";
-  final String welcome = "Bienvenidos";
+  final String welcome = "Bienvenido";
   final String registerTitle = "Registrarse";
   final String textTitleRegister = "¿Ya tienes una cuenta? ";
   final String textTitleReset = "¿Olvidaste tu contraseña?";

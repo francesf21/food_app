@@ -13,7 +13,7 @@ class NetworkApiServices extends BaseApiServices {
 
   @override
   Future getGetApiResponse(String url) async {
-    final autorization = prefs.getTokenApp == ''
+    final autorization = prefs.getTokenApp != ''
         ? {
             "Authorization": 'Bearer ${prefs.getTokenApp}',
             "apiKey": AppUrl.apiKey,

@@ -15,42 +15,21 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final LoginViewModel _viewModel;
-
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-
-  @override
-  void initState() {
-    _viewModel = LoginViewModel();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _viewModel.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginViewModel>(
-      create: (context) => _viewModel,
+      create: (context) => LoginViewModel(),
       child: Consumer<LoginViewModel>(
         builder: (_, value, __) {
           switch (value.sessionUser.status) {
-            case Status.initial:
-              return _ComponentHome(
-                emailController: _emailController,
-                passwordController: _passwordController,
-                viewModel: _viewModel,
-              );
             case Status.loading:
-              return const LoadingWidget();
+              _isLoading = true;
+              return _ComponentsRegister(
+                isLoading: _isLoading,
+                viewModel: value,
+              );
             case Status.completed:
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => Navigator.of(context).pushNamedAndRemoveUntil(
@@ -60,8 +39,18 @@ class _LoginScreenState extends State<LoginScreen> {
               );
               return Container();
             case Status.error:
-              // Tomar los errores del servicio
-              return const CircularProgressIndicator();
+              _isLoading = false;
+              return _ComponentsRegister(
+                isError: true,
+                messageSnackBar: value.sessionUser.message!,
+                viewModel: value,
+              );
+            case Status.initial:
+              _isLoading = false;
+              return _ComponentsRegister(
+                isLoading: _isLoading,
+                viewModel: value,
+              );
             default:
               return const CircularProgressIndicator();
           }
@@ -71,125 +60,173 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class _ComponentHome extends StatelessWidget {
-  final LoginViewModel _viewModel;
+class _ComponentsRegister extends StatelessWidget {
+  final LoginViewModel viewModel;
 
-  final TextEditingController _emailController;
-  final TextEditingController _passwordController;
+  final bool isLoading;
+  bool isError;
+  final String messageSnackBar;
 
-  const _ComponentHome({
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  _ComponentsRegister({
     Key? key,
-    required TextEditingController emailController,
-    required TextEditingController passwordController,
-    required LoginViewModel viewModel,
-  })  : _emailController = emailController,
-        _passwordController = passwordController,
-        _viewModel = viewModel,
-        super(key: key);
+    required this.viewModel,
+    this.isLoading = false,
+    this.isError = false,
+    this.messageSnackBar = "",
+  }) : super(key: key);
+
+  Widget showErrorMessage(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => context.showErrorSnackBar(
+        message: messageSnackBar,
+      ),
+    );
+    isError = false;
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Dimens.d32,
+      body: Visibility(
+        visible: isLoading,
+        replacement: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (isError) showErrorMessage(context),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    Dimens.d32,
+                  ),
                 ),
-              ),
-              elevation: Dimens.d8,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Dimens.d48,
-                      ),
-                      child: LogoImage(
-                        image: AppString.instance.pathOnboardImageIcon,
-                        height: Dimens.heightIcon,
-                      ),
-                    ),
-                    AppText(
-                      text: AppString.instance.welcome,
-                      style: AppStyle.instance.titleText,
-                      topPadding: Dimens.d24,
-                      bottomPadding: Dimens.d24,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Dimens.d32,
-              ),
-              child: SizedBox(
-                child: Form(
+                elevation: Dimens.d8,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      InputForm(
-                        controller: _emailController,
-                        textLabel: AppString.instance.textEmail,
-                        textInputType: TextInputType.emailAddress,
-                      ),
-                      InputForm(
-                        controller: _passwordController,
-                        textLabel: AppString.instance.textPassword,
-                        obscureText: true,
-                      ),
-                      ForgetAuthOption(
-                        onPressed: () {
-                          Future.delayed(Duration.zero, () {
-                            Navigator.of(context).pushNamed(
-                              RoutesName.resetPassowrd,
-                            );
-                          });
-                        },
-                        text: '',
-                        action: AppString.instance.textTitleReset,
-                        isRight: true,
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(
                           top: Dimens.d40,
                         ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _viewModel.signInWithPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                            );
-                          },
-                          child: Text(
-                            AppString.instance.actionRegister,
-                            style: AppStyle.instance.bodyMedium.copyWith(
-                              fontSize: Dimens.d18,
-                            ),
-                          ),
+                        child: LogoImage(
+                          image: AppString.instance.pathOnboardImageIcon,
+                          height: Dimens.heightIcon,
                         ),
                       ),
-                      ForgetAuthOption(
-                        onPressed: () {
-                          Future.delayed(Duration.zero, () {
-                            Navigator.of(context).pushNamed(
-                              RoutesName.register,
-                            );
-                          });
-                        },
-                        text: AppString.instance.textTitleLogin,
-                        action: AppString.instance.actionlogin,
+                      AppText(
+                        text: AppString.instance.welcome,
+                        style: AppStyle.instance.titleText,
+                        topPadding: Dimens.d24,
+                        bottomPadding: Dimens.d24,
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: Dimens.d32,
+                ),
+                child: SizedBox(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        InputForm(
+                          controller: _emailController,
+                          textLabel: AppString.instance.textEmail,
+                          textInputType: TextInputType.emailAddress,
+                          onValidate: (value) {
+                            if (value!.isEmpty) {
+                              return "Ingrese un correo electrónico valido";
+                            }
+
+                            if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                            ).hasMatch(value)) {
+                              return 'El valor ingresado no es un correo electrónico';
+                            }
+
+                            return null;
+                          },
+                        ),
+                        InputForm(
+                          controller: _passwordController,
+                          textLabel: AppString.instance.textPassword,
+                          obscureText: true,
+                          onValidate: (value) {
+                            if (value!.isEmpty) {
+                              return "Ingrese una contraseña valida";
+                            }
+
+                            if (value.length < 6) {
+                              return "La contraseña debe tener al menos 6 caracteres";
+                            }
+
+                            return null;
+                          },
+                        ),
+                        ForgetAuthOption(
+                          onPressed: () {
+                            Future.delayed(Duration.zero, () {
+                              Navigator.of(context).pushNamed(
+                                RoutesName.resetPassowrd,
+                              );
+                            });
+                          },
+                          text: '',
+                          action: AppString.instance.textTitleReset,
+                          isRight: true,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: Dimens.d40,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                viewModel.signInWithPassword(
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                );
+                              }
+                            },
+                            child: Text(
+                              AppString.instance.actionRegister,
+                              style: AppStyle.instance.bodyMedium.copyWith(
+                                fontSize: Dimens.d18,
+                              ),
+                            ),
+                          ),
+                        ),
+                        ForgetAuthOption(
+                          onPressed: () {
+                            Future.delayed(Duration.zero, () {
+                              Navigator.of(context).pushNamed(
+                                RoutesName.register,
+                              );
+                            });
+                          },
+                          text: AppString.instance.textTitleLogin,
+                          action: AppString.instance.actionlogin,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        child: const Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );

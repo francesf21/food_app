@@ -6,6 +6,7 @@ class InputForm extends StatelessWidget {
   final TextInputType textInputType;
   final bool obscureText;
   final TextEditingController controller;
+  final String? Function(String?)? onValidate;
 
   const InputForm({
     Key? key,
@@ -13,6 +14,7 @@ class InputForm extends StatelessWidget {
     required this.controller,
     this.textInputType = TextInputType.text,
     this.obscureText = false,
+    this.onValidate,
   }) : super(key: key);
 
   @override
@@ -27,9 +29,11 @@ class InputForm extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
+        validator: onValidate,
         cursorColor: AppColors.primaryColor,
         keyboardType: textInputType,
         decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
           labelStyle: const TextStyle(
             color: AppColors.blackColor,
           ),
