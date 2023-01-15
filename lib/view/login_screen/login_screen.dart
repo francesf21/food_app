@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
           switch (value.sessionUser.status) {
             case Status.loading:
               _isLoading = true;
-              return _ComponentsRegister(
+              return _ComponentLogin(
                 isLoading: _isLoading,
                 viewModel: value,
               );
@@ -40,14 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
               return Container();
             case Status.error:
               _isLoading = false;
-              return _ComponentsRegister(
+              return _ComponentLogin(
                 isError: true,
                 messageSnackBar: value.sessionUser.message!,
                 viewModel: value,
               );
             case Status.initial:
               _isLoading = false;
-              return _ComponentsRegister(
+              return _ComponentLogin(
                 isLoading: _isLoading,
                 viewModel: value,
               );
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class _ComponentsRegister extends StatelessWidget {
+class _ComponentLogin extends StatelessWidget {
   final LoginViewModel viewModel;
 
   final bool isLoading;
@@ -71,7 +71,7 @@ class _ComponentsRegister extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  _ComponentsRegister({
+  _ComponentLogin({
     Key? key,
     required this.viewModel,
     this.isLoading = false,
@@ -145,13 +145,14 @@ class _ComponentsRegister extends StatelessWidget {
                           textInputType: TextInputType.emailAddress,
                           onValidate: (value) {
                             if (value!.isEmpty) {
-                              return "Ingrese un correo electrónico valido";
+                              return AppString
+                                  .instance.textValidateEmailIsEmpty;
                             }
 
                             if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                             ).hasMatch(value)) {
-                              return 'El valor ingresado no es un correo electrónico';
+                              return AppString.instance.textValidateEmailRegex;
                             }
 
                             return null;
@@ -163,11 +164,12 @@ class _ComponentsRegister extends StatelessWidget {
                           obscureText: true,
                           onValidate: (value) {
                             if (value!.isEmpty) {
-                              return "Ingrese una contraseña valida";
+                              return AppString
+                                  .instance.textValidatePasswordIsEmpty;
                             }
 
                             if (value.length < 6) {
-                              return "La contraseña debe tener al menos 6 caracteres";
+                              return AppString.instance.textValidatePasswordMin;
                             }
 
                             return null;

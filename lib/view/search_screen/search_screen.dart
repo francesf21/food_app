@@ -108,6 +108,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                   color: Colors.transparent,
                                 ),
                               ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: const BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
                               disabledBorder: UnderlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: const BorderSide(

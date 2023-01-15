@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/data/response/status.dart';
 import 'package:provider/provider.dart';
 
 import 'package:food_app/res/res.dart';
 import 'package:food_app/routes/routes.dart';
+import 'package:food_app/data/response/status.dart';
 import 'package:food_app/view_models/view_model.dart';
 import 'package:food_app/res/components/components.dart';
 
@@ -26,7 +26,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           switch (value.emailUser.status) {
             case Status.loading:
               _isLoading = true;
-              return _ComponentsResetPassword(
+              return _ComponentResetPassword(
                 isLoading: _isLoading,
                 viewModel: value,
               );
@@ -40,14 +40,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               return Container();
             case Status.error:
               _isLoading = false;
-              return _ComponentsResetPassword(
+              return _ComponentResetPassword(
                 isError: true,
                 messageSnackBar: value.emailUser.message!,
                 viewModel: value,
               );
             case Status.initial:
               _isLoading = false;
-              return _ComponentsResetPassword(
+              return _ComponentResetPassword(
                 isLoading: _isLoading,
                 viewModel: value,
               );
@@ -60,17 +60,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 }
 
-class _ComponentsResetPassword extends StatelessWidget {
+class _ComponentResetPassword extends StatelessWidget {
   final ForgotViewModel viewModel;
 
   final bool isLoading;
-  final bool isError;
+  bool isError;
   final String messageSnackBar;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _emailcontroller = TextEditingController();
 
-  _ComponentsResetPassword({
+  _ComponentResetPassword({
     Key? key,
     required this.viewModel,
     this.isLoading = false,
@@ -79,7 +79,7 @@ class _ComponentsResetPassword extends StatelessWidget {
   }) : super(key: key);
 
   Widget showErrorMessage(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(messageSnackBar),
@@ -87,6 +87,7 @@ class _ComponentsResetPassword extends StatelessWidget {
         ),
       );
     });
+    isError = false;
     return Container();
   }
 
@@ -95,83 +96,91 @@ class _ComponentsResetPassword extends StatelessWidget {
     return Scaffold(
       body: Visibility(
         visible: isLoading,
-        replacement: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              title: Text(
-                AppString.instance.restpass,
-                style: AppStyle.instance.bodyMediumItems.copyWith(
-                  color: AppColors.blackColor,
-                  fontSize: Dimens.d20,
+        replacement: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              AppBar(
+                backgroundColor: Colors.transparent,
+                title: Text(
+                  AppString.instance.resetPassword,
+                  style: AppStyle.instance.bodyXLargeBlack,
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: Dimens.d32),
-                child: SizedBox(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        InputForm(
-                          textLabel: AppString.instance.textEmail,
-                          controller: _emailcontroller,
-                          textInputType: TextInputType.emailAddress,
-                          onValidate: (value) {
-                            if (value!.isEmpty) {
-                              return "Ingrese un correo electrónico valido";
-                            }
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: Dimens.d32,
+                  right: Dimens.d16,
+                  left: Dimens.d16,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      InputForm(
+                        controller: _emailcontroller,
+                        textLabel: AppString.instance.textEmail,
+                        textInputType: TextInputType.emailAddress,
+                        onValidate: (value) {
+                          if (value!.isEmpty) {
+                            return AppString.instance.textValidateEmailIsEmpty;
+                          }
 
-                            if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                            ).hasMatch(value)) {
-                              return 'El valor ingresado no es un correo electrónico';
-                            }
+                          if (!RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                          ).hasMatch(value)) {
+                            return AppString.instance.textValidateEmailRegex;
+                          }
 
-                            return null;
-                          },
+                          return null;
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimens.d16,
+                          left: Dimens.d24,
+                          right: Dimens.d24,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: Dimens.d40,
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                viewModel.sendEmail(
-                                  email: _emailcontroller.text,
-                                );
-                              }
-                            },
+                        child: Container(
+                          color: AppColors.primaryColor.withOpacity(.2),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
                             child: Text(
-                              AppString.instance.enviarcontra,
-                              style: AppStyle.instance.bodyMedium.copyWith(
-                                fontSize: Dimens.d18,
+                              AppString.instance.textSendEmailPasswordReset,
+                              textAlign: TextAlign.justify,
+                              style: AppStyle.instance.errorbody.copyWith(
+                                color: AppColors.blackColor.withOpacity(.6),
                               ),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: Dimens.d40),
-                          child: SizedBox(
-                            width: 300,
-                            child: Text(
-                                'Usted Recibira un correo que lo ayudara para restabblecer su contraseña',
-                                textAlign: TextAlign.center,
-                                style: AppStyle.instance.bodyMediumBlack),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimens.d40,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              viewModel.sendEmail(
+                                email: _emailcontroller.text,
+                              );
+                            }
+                          },
+                          child: Text(
+                            AppString.instance.enviarcontra,
+                            style: AppStyle.instance.bodyMedium.copyWith(
+                              fontSize: Dimens.d18,
+                            ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
         child: const Center(
           child: CircularProgressIndicator(),
@@ -180,5 +189,3 @@ class _ComponentsResetPassword extends StatelessWidget {
     );
   }
 }
-
-// reset pass complete

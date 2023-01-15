@@ -56,6 +56,12 @@ class AppStyle {
     fontWeight: FontWeight.w400,
   );
 
+  final TextStyle textAppBar = GoogleFonts.eczar(
+    color: AppColors.blackColor,
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+  );
+
   final TextStyle bodyMedium = GoogleFonts.eczar(
     color: AppColors.whiteColor,
     fontSize: 18,

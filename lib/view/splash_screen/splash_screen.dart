@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/res/components/error_component.dart';
 import 'package:provider/provider.dart';
 
 import 'package:food_app/res/res.dart';
@@ -16,8 +15,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late final SplashViewModel _viewModel;
-
   Future<void> executeAfterBuild(String route) async {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => Navigator.of(context).pushNamedAndRemoveUntil(
@@ -28,16 +25,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  void initState() {
-    _viewModel = SplashViewModel();
-    _viewModel.initSplash();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SplashViewModel>(
-      create: (context) => _viewModel,
+      create: (context) => SplashViewModel()..initSplash(),
       child: Consumer<SplashViewModel>(
         builder: (_, value, __) {
           switch (value.statusSplash.status) {

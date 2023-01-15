@@ -33,7 +33,7 @@ class _ListItemProductState extends State<ListItemProduct> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 400,
+      height: 420,
       child: Column(
         children: [
           Padding(
@@ -48,13 +48,6 @@ class _ListItemProductState extends State<ListItemProduct> {
                   widget.categories.nameCategory,
                   style: AppStyle.instance.bodyMediumBlack,
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Ver todo',
-                    style: AppStyle.instance.bodyMediumItems,
-                  ),
-                ),
               ],
             ),
           ),
@@ -66,6 +59,7 @@ class _ListItemProductState extends State<ListItemProduct> {
                   switch (value.productsList.status) {
                     case Status.completed:
                       return ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: value.productsList.data!.length,
                         itemBuilder: (context, index) {
@@ -74,6 +68,7 @@ class _ListItemProductState extends State<ListItemProduct> {
                             nameProduct: product.name,
                             priceoProduct: product.price,
                             urlProduct: product.image,
+                            descriptionProduct: product.descripction,
                           );
                         },
                       );

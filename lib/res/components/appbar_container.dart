@@ -15,19 +15,10 @@ class AppbarContainer extends StatefulWidget {
 }
 
 class _AppbarContainerState extends State<AppbarContainer> {
-  late final ProfileViewModel _viewModel;
-
-  @override
-  void initState() {
-    _viewModel = ProfileViewModel();
-    _viewModel.getProfileApi();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ProfileViewModel>(
-      create: (context) => _viewModel,
+      create: (context) => ProfileViewModel()..getProfileApi(),
       child: Consumer<ProfileViewModel>(
         builder: (_, value, __) {
           switch (value.userProfile.status) {
@@ -37,6 +28,8 @@ class _AppbarContainerState extends State<AppbarContainer> {
                 isError: false,
                 isDefault: false,
                 urlImage: value.userProfile.data!.avatarUrl,
+                name:
+                    "${value.userProfile.data!.firstname} ${value.userProfile.data!.lastname}",
               );
             case Status.loading:
               return const _AppBarElement(
@@ -68,12 +61,14 @@ class _AppBarElement extends StatelessWidget {
   final bool isError;
   final bool isDefault;
   final String? urlImage;
+  final String? name;
 
   const _AppBarElement({
     Key? key,
     required this.isLoading,
     required this.isError,
     required this.isDefault,
+    this.name = '',
     this.urlImage = '',
   }) : super(key: key);
 
@@ -85,7 +80,6 @@ class _AppBarElement extends StatelessWidget {
         vertical: Dimens.d16,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
             radius: Dimens.d24,
@@ -100,14 +94,13 @@ class _AppBarElement extends StatelessWidget {
                     ? Image.asset(AppString.instance.pathProfileImage)
                     : null)),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.shopping_cart_outlined,
-              color: AppColors.primaryColor,
-              size: Dimens.d32,
+          Padding(
+            padding: const EdgeInsets.only(left: Dimens.d16),
+            child: Text(
+              name ?? '',
+              style: AppStyle.instance.textAppBar,
             ),
-          )
+          ),
         ],
       ),
     );
