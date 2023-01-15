@@ -17,12 +17,12 @@ class Routes {
 
       case RoutesName.login:
         return MaterialPageRoute(
-          builder: (BuildContext context) => LoginScreen(),
+          builder: (BuildContext context) => const LoginScreen(),
         );
 
       case RoutesName.register:
         return MaterialPageRoute(
-          builder: (BuildContext context) => RegisterScreen(),
+          builder: (BuildContext context) => const RegisterScreen(),
         );
 
       case RoutesName.resetPassowrd:
@@ -38,6 +38,11 @@ class Routes {
       case RoutesName.home:
         return MaterialPageRoute(
           builder: (BuildContext context) => const HomeScreen(),
+        );
+
+      case RoutesName.search:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const SearchScreen(),
         );
 
       default:

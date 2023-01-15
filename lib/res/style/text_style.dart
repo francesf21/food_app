@@ -38,10 +38,28 @@ class AppStyle {
     fontWeight: FontWeight.w700,
   );
 
+  final TextStyle h5BoldBlack = GoogleFonts.eczar(
+    color: AppColors.blackColor,
+    fontSize: 26,
+    fontWeight: FontWeight.w700,
+  );
+
   final TextStyle bodyXLarge = GoogleFonts.eczar(
     color: AppColors.whiteColor,
     fontSize: 20,
     fontWeight: FontWeight.w400,
+  );
+
+  final TextStyle bodyXLargeBlack = GoogleFonts.eczar(
+    color: AppColors.blackColor,
+    fontSize: 20,
+    fontWeight: FontWeight.w400,
+  );
+
+  final TextStyle textAppBar = GoogleFonts.eczar(
+    color: AppColors.blackColor,
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
   );
 
   final TextStyle bodyMedium = GoogleFonts.eczar(

@@ -47,9 +47,9 @@ class ProfileRepository {
     required String avatarUrl,
   }) async {
     try {
-      final user = supabase.auth.currentUser;
+      final user = supabase.auth.currentUser?.id ?? '';
       await supabase.from("profiles").insert({
-        "id": user!.id,
+        "id": user,
         "username": username,
         "firstname": firstname,
         "lastname": lastname,
@@ -65,9 +65,9 @@ class ProfileRepository {
 
   Future<Profiles> getProfileOfUserId() async {
     try {
-      final user = supabase.auth.currentUser;
+      final user = supabase.auth.currentUser?.id ?? '';
       dynamic response = await _apiServices.getGetApiResponse(
-        "${AppUrl.profileOfUserId}${user!.id}",
+        "${AppUrl.profileOfUserId}${user}",
       );
       return response = profilesOfUserIdFromMap(response);
     } catch (e) {

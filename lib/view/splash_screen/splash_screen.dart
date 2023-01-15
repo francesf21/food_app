@@ -15,8 +15,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late final SplashViewModel _viewModel;
-
   Future<void> executeAfterBuild(String route) async {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => Navigator.of(context).pushNamedAndRemoveUntil(
@@ -27,20 +25,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  void initState() {
-    _viewModel = SplashViewModel();
-    _viewModel.initSplash();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SplashViewModel>(
-      create: (context) => _viewModel,
+      create: (context) => SplashViewModel()..initSplash(),
       child: Consumer<SplashViewModel>(
         builder: (_, value, __) {
           switch (value.statusSplash.status) {
-            case Status.loading:
+            case Status.error:
               return const _ComponentSplash();
             case Status.completed:
               if (value.statusSplash.data!) {
@@ -50,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 executeAfterBuild(RoutesName.onboard);
                 return Container();
               }
-            case Status.error:
+            case Status.loading:
               return const _ComponentSplash();
             default:
               return const _ComponentSplash();
@@ -90,7 +81,7 @@ class _ComponentSplash extends StatelessWidget {
                 backgroundColor: AppColors.primaryColor,
                 color: AppColors.backgroundColor,
               ),
-            )
+            ),
           ],
         ),
       ),

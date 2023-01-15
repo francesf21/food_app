@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:food_app/repository/auth_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:food_app/models/profile.dart';
@@ -9,6 +10,7 @@ import 'package:food_app/data/response/api_response.dart';
 
 class ProfileViewModel with ChangeNotifier {
   final _profileRepository = ProfileRepository();
+  final _authRepository = AuthRepository();
 
   ApiResponse<Profiles> userProfile = ApiResponse.initial();
 
@@ -62,5 +64,9 @@ class ProfileViewModel with ChangeNotifier {
     }).onError((error, stackTrace) => setProfile(
           ApiResponse.error(error.toString()),
         ));
+  }
+
+  Future<void> signOut() async {
+    await _authRepository.signOut();
   }
 }

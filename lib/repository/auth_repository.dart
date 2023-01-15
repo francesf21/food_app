@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthRepository {
   Future<bool> redirect() async {
     try {
+      prefs.setTokenApp = supabase.auth.currentSession?.accessToken ?? "";
       return supabase.auth.currentSession != null;
     } catch (e) {
       rethrow;
@@ -14,45 +15,33 @@ class AuthRepository {
   Future<AuthResponse> singInWithPassword({
     required String email,
     required String password,
-  }) async {
-    try {
-      final response = await supabase.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
-
-      prefs.setTokenApp = response.session!.accessToken;
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  }) async =>
+      await supabase.auth
+          .signInWithPassword(email: email, password: password)
+          .then((value) {
+        prefs.setTokenApp = value.session!.accessToken;
+        return value;
+      });
 
   Future<AuthResponse> signUpUser({
-    required String name,
     required String email,
     required String password,
-  }) async {
-    try {
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
+  }) async =>
+      await supabase.auth.signUp(email: email, password: password).then(
+        (value) {
+          prefs.setTokenApp = value.session!.accessToken;
+          return value;
+        },
       );
 
-      prefs.setTokenApp = response.session!.accessToken;
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  Future<void> forgotPassword({
+    required String email,
+  }) async =>
+      await supabase.auth.resetPasswordForEmail(
+        email,
+      );
 
-  Future<void> forgotPassword({required String email}) async {
-    try {
-      await supabase.auth.resetPasswordForEmail(email);
-    } on AuthException catch (error) {
-      print("Error en el metodo forgotPassword $error");
-    } catch (e) {
-      print("Error en el metodo forgotPassword $e");
-    }
-  }
+  Future<void> signOut() async => await supabase.auth.signOut().then(
+        (_) => prefs.setTokenApp = "",
+      );
 }

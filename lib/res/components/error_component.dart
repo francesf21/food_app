@@ -7,6 +7,7 @@ class ErrorComponent extends StatelessWidget {
   final String titleError;
   final String bodyError;
   final String textButtonTry;
+  final bool isbutton;
   final void Function()? onPressed;
 
   const ErrorComponent({
@@ -14,8 +15,9 @@ class ErrorComponent extends StatelessWidget {
     required this.icon,
     required this.titleError,
     required this.bodyError,
-    required this.textButtonTry,
+    this.textButtonTry = '',
     this.onPressed,
+    this.isbutton = false,
   }) : super(key: key);
 
   @override
@@ -35,37 +37,50 @@ class ErrorComponent extends StatelessWidget {
               color: AppColors.backgroundItem,
             ),
           ),
-          Text(
-            titleError,
-            textAlign: TextAlign.center,
-            style: AppStyle.instance.bodyText,
-          ),
           Padding(
             padding: const EdgeInsets.only(
-              top: Dimens.d12,
-              left: Dimens.d80,
-              right: Dimens.d80,
+              top: Dimens.d16,
+              left: Dimens.d40,
+              right: Dimens.d40,
             ),
-            child: Text(
-              bodyError,
-              style: AppStyle.instance.errorbody,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: Dimens.d40,
-            ),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                textButtonTry,
-                style: AppStyle.instance.bodyMedium.copyWith(
-                  fontSize: Dimens.d18,
+            child: Column(
+              children: [
+                Text(
+                  titleError,
+                  textAlign: TextAlign.center,
+                  style: AppStyle.instance.bodyText,
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: Dimens.d12,
+                    left: Dimens.d80,
+                    right: Dimens.d80,
+                  ),
+                  child: Text(
+                    bodyError,
+                    style: AppStyle.instance.errorbody,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
           ),
+          isbutton
+              ? Padding(
+                  padding: const EdgeInsets.only(
+                    top: Dimens.d40,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: onPressed,
+                    child: Text(
+                      textButtonTry,
+                      style: AppStyle.instance.bodyMedium.copyWith(
+                        fontSize: Dimens.d18,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

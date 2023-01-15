@@ -4,6 +4,7 @@ class Dimens {
   Dimens._init();
 
   /* Dimens Screen */
+  static const double d4 = 4.0;
   static const double d6 = 6.0;
   static const double d8 = 8.0;
   static const double d12 = 12.0;

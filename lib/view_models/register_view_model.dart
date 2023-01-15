@@ -15,17 +15,27 @@ class RegisterViewModel with ChangeNotifier {
   }
 
   Future<void> signUpUser({
-    required String name,
     required String email,
     required String password,
   }) async {
     setInitSesion(ApiResponse.loading());
-    await _authRepository
-        .signUpUser(name: name, email: email, password: password)
-        .then((value) {
+    _authRepository.signUpUser(email: email, password: password).then((value) {
       setInitSesion(ApiResponse.completed(value));
     }).onError((error, stackTrace) => setInitSesion(
-              ApiResponse.error(error.toString()),
-            ));
+          ApiResponse.error(returnResponse(error as AuthException)),
+        ));
+  }
+
+  dynamic returnResponse(AuthException response) {
+    switch (response.statusCode) {
+      case "400":
+        return "Usuario ya registrado, por favor inicie sesión";
+      case "404":
+        return "Usuario ya registrado, por favor inicie sesión";
+      case "500":
+        return "Usuario ya registrado, por favor inicie sesión";
+      default:
+        return "Error en la comunicación, intente más tarde";
+    }
   }
 }
