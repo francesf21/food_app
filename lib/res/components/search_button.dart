@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/res/res.dart';
+import 'package:food_app/routes/routes.dart';
 
 class SearchButton extends StatelessWidget {
   const SearchButton({
@@ -8,13 +9,19 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimens.d24,
-          vertical: Dimens.d16,
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimens.d24,
+        vertical: Dimens.d16,
+      ),
+      child: InkWell(
+        onTap: () {
+          Future.delayed(Duration.zero, () {
+            Navigator.of(context).pushNamed(
+              RoutesName.search,
+            );
+          });
+        },
         child: Container(
           height: Dimens.d60,
           width: double.infinity,
