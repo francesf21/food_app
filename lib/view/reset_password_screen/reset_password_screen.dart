@@ -83,7 +83,7 @@ class _ComponentsResetPassword extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(messageSnackBar),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.primaryColor,
         ),
       );
     });

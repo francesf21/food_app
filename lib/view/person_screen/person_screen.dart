@@ -63,18 +63,59 @@ class _PersonScreenState extends State<PersonScreen> {
           InputForm(
             textLabel: 'Nombre de Usuario',
             controller: _userNameController,
+            onValidate: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor ingrese su nombre de usuario';
+              }
+              return null;
+            },
           ),
           InputForm(
             textLabel: 'Nombres',
             controller: _firstNameController,
+            textInputType: TextInputType.name,
+            onValidate: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor ingrese su nombre';
+              }
+
+              if (!RegExp(
+                '!@#<>?":_``~;[]\|=-+)(*&^%1234567890',
+              ).hasMatch(value)) {
+                return 'El valor ingresado no es un nombre';
+              }
+            },
           ),
           InputForm(
             textLabel: 'Apellidos',
             controller: _lastNameController,
+            onValidate: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor ingrese su nombre';
+              }
+
+              if (!RegExp(
+                '!@#<>?":_``~;[]\|=-+)(*&^%1234567890',
+              ).hasMatch(value)) {
+                return 'El valor ingresado no es un nombre';
+              }
+            },
           ),
           InputForm(
             textLabel: 'Telefono',
             controller: _phoneController,
+            textInputType: TextInputType.phone,
+            onValidate: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor ingrese su telefono';
+              }
+
+              if (!RegExp(
+                '!@#<>?":_``~;[]\|=-+)(*&^%abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+              ).hasMatch(value)) {
+                return 'El valor ingresado no es un telefono';
+              }
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(
