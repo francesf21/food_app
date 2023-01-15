@@ -10,4 +10,6 @@ class AppUrl {
       '${urlBasepath}products?select=*&limit=10&category_id=eq.';
 
   static String profileOfUserId = '${urlBasepath}profiles?&select=*&id=eq.';
+
+  static String searchFood = '${urlBasepath}products?select=*&name=ilike.';
 }

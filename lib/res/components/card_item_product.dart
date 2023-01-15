@@ -75,7 +75,7 @@ class CardItemProduct extends StatelessWidget {
                         ),
                         icon: const Icon(Icons.shopping_cart_outlined),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

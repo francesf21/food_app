@@ -40,6 +40,11 @@ class Routes {
           builder: (BuildContext context) => const HomeScreen(),
         );
 
+      case RoutesName.search:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const SearchScreen(),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) {

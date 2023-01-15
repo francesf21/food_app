@@ -7,4 +7,5 @@ class RoutesName {
   static const String resetPassowrd = 'reset_passowrd_screen';
   static const String person = 'person_screen';
   static const String forgot = 'forgot_screen';
+  static const String search = 'search_screen';
 }
