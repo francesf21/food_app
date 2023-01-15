@@ -13,3 +13,4 @@ export 'package:food_app/res/components/error_component.dart';
 export 'package:food_app/res/components/item_button_profile.dart';
 export 'package:food_app/res/components/loading_widget.dart';
 export 'package:food_app/res/components/error_component.dart';
+export 'package:food_app/res/components/card_product_list.dart.dart';
