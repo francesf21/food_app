@@ -6,10 +6,16 @@ class AppUrl {
 
   static String categoriesList = "${urlBasepath}categories?select=*&limit=6";
 
-  static String productOfCategoryId =
-      '${urlBasepath}products?select=*&limit=10&category_id=eq.';
-
   static String profileOfUserId = '${urlBasepath}profiles?&select=*&id=eq.';
 
   static String searchFood = '${urlBasepath}products?select=*&name=ilike.';
+
+  static String favoriteForProfileId =
+      '${urlBasepath}view_favorites?select=*&profile_id=eq.';
+
+  static String favoriteCreate = '${urlBasepath}favorites';
+
+  static String favoriteUpdate = '${urlBasepath}favorites?id=eq.';
+
+  static String productWithFavorite = '${urlBasepath}rpc/get_product_favorite';
 }

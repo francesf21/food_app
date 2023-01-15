@@ -35,7 +35,7 @@ class _ItemListCategoriesState extends State<ItemListCategories> {
               return ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                physics: const ScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: value.categoriesList.data!.length,
                 itemBuilder: (context, index) {
                   final category = value.categoriesList.data![index];

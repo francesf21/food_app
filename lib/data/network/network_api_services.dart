@@ -13,7 +13,7 @@ class NetworkApiServices extends BaseApiServices {
 
   @override
   Future getGetApiResponse(String url) async {
-    final autorization = prefs.getTokenApp != ''
+    final headers = prefs.getTokenApp != ''
         ? {
             "Authorization": 'Bearer ${prefs.getTokenApp}',
             "apiKey": AppUrl.apiKey,
@@ -25,7 +25,7 @@ class NetworkApiServices extends BaseApiServices {
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: autorization,
+        headers: headers,
       );
       responseJson = returnResponse(response);
       debugPrint(response.body.toString());
@@ -41,10 +41,53 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseJson;
 
     try {
+      final headers = prefs.getTokenApp != ''
+          ? {
+              "Authorization": 'Bearer ${prefs.getTokenApp}',
+              "apiKey": AppUrl.apiKey,
+              "Content-Type": "application/json",
+              "Prefer": "return=minimal"
+            }
+          : {
+              "": "",
+              "apiKey": AppUrl.apiKey,
+              "Content-Type": "application/json",
+              "Prefer": "return=minimal"
+            };
+
       final response = await http
-          .post(Uri.parse(url), body: data)
+          .post(Uri.parse(url), body: data, headers: headers)
           .timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
+      debugPrint(response.body.toString());
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+
+    return responseJson;
+  }
+
+  @override
+  Future getPatchApiResponse(String url, dynamic data) async {
+    final headers = prefs.getTokenApp != ''
+        ? {
+            "Authorization": 'Bearer ${prefs.getTokenApp}',
+            "apiKey": AppUrl.apiKey,
+            "Content-Type": "application/json",
+          }
+        : {
+            "": "",
+            "apiKey": AppUrl.apiKey,
+            "Content-Type": "application/json",
+          };
+    try {
+      final response = await http.patch(
+        Uri.parse(url),
+        headers: headers,
+        body: data,
+      );
+      responseJson = returnResponse(response);
+      debugPrint(response.body.toString());
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -56,6 +99,12 @@ class NetworkApiServices extends BaseApiServices {
     switch (response.statusCode) {
       case 200:
         dynamic responseJson = response.body.toString();
+        return responseJson;
+      case 201:
+        dynamic responseJson = "Se creó el registro correctamente";
+        return responseJson;
+      case 204:
+        dynamic responseJson = "Se a actualizado la información";
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());

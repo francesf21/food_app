@@ -9,6 +9,9 @@ class CardItemProduct extends StatefulWidget {
   final double priceoProduct;
   final String urlProduct;
   final String descriptionProduct;
+  final bool? statusFavorite;
+
+  final void Function()? onPressed;
 
   const CardItemProduct({
     Key? key,
@@ -16,6 +19,8 @@ class CardItemProduct extends StatefulWidget {
     required this.priceoProduct,
     required this.urlProduct,
     required this.descriptionProduct,
+    this.statusFavorite,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -145,12 +150,16 @@ class _CardItemProductState extends State<CardItemProduct> {
                           backgroundColor: Colors.transparent,
                           foregroundColor: AppColors.primaryColor,
                         ),
-                        onPressed: () {},
+                        onPressed: widget.onPressed,
                         label: Text(
                           AppString.instance.addText,
                         ),
-                        icon: const FaIcon(
-                          FontAwesomeIcons.heart,
+                        icon: FaIcon(
+                          widget.statusFavorite != null
+                              ? widget.statusFavorite!
+                                  ? FontAwesomeIcons.heartCircleCheck
+                                  : FontAwesomeIcons.heart
+                              : FontAwesomeIcons.heart,
                         ),
                       ),
                     ),

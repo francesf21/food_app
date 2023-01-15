@@ -25,7 +25,7 @@ class _ListItemProductState extends State<ListItemProduct> {
   @override
   void initState() {
     _viewModel = HomeViewModel();
-    _viewModel.getProductOfCategoryIdListApi(widget.categories.id);
+    _viewModel.getProductWithFavoriteListApi(widget.categories.id);
     super.initState();
   }
 
@@ -56,19 +56,31 @@ class _ListItemProductState extends State<ListItemProduct> {
               create: (context) => _viewModel,
               child: Consumer<HomeViewModel>(
                 builder: (_, value, __) {
-                  switch (value.productsList.status) {
+                  switch (value.productWithFavorite.status) {
                     case Status.completed:
                       return ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        itemCount: value.productsList.data!.length,
+                        itemCount: value.productWithFavorite.data!.length,
                         itemBuilder: (context, index) {
-                          final product = value.productsList.data![index];
+                          final product =
+                              value.productWithFavorite.data![index];
                           return CardItemProduct(
                             nameProduct: product.name,
                             priceoProduct: product.price,
                             urlProduct: product.image,
                             descriptionProduct: product.descripction,
+                            statusFavorite: product.status,
+                            onPressed: () {
+                              value.createOrInsertFavorite(
+                                CategoryId: product.categoryId,
+                                favoriteId: product.favoriteId,
+                                productId: product.productId,
+                                status: product.status == null
+                                    ? true
+                                    : !product.status!,
+                              );
+                            },
                           );
                         },
                       );
