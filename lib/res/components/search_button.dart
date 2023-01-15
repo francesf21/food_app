@@ -23,7 +23,7 @@ class SearchButton extends StatelessWidget {
           });
         },
         child: Container(
-          height: Dimens.d60,
+          height: Dimens.d70,
           width: double.infinity,
           decoration: const ShapeDecoration(
             shape: StadiumBorder(),

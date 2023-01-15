@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/view_models/search_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

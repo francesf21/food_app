@@ -64,12 +64,8 @@ class _ComponentsRegister extends StatelessWidget {
   final RegisterViewModel viewModel;
 
   final bool isLoading;
-  final bool isError;
+  bool isError;
   final String messageSnackBar;
-
-  final GlobalKey<FormState> _formKey = GlobalKey();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   _ComponentsRegister({
     Key? key,
@@ -79,12 +75,19 @@ class _ComponentsRegister extends StatelessWidget {
     this.messageSnackBar = "",
   }) : super(key: key);
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+
   Widget showErrorMessage(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => context.showErrorSnackBar(
         message: messageSnackBar,
       ),
     );
+    isError = false;
     return Container();
   }
 
@@ -144,13 +147,14 @@ class _ComponentsRegister extends StatelessWidget {
                           textInputType: TextInputType.emailAddress,
                           onValidate: (value) {
                             if (value!.isEmpty) {
-                              return "Ingrese un correo electrónico valido";
+                              return AppString
+                                  .instance.textValidateEmailIsEmpty;
                             }
 
                             if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                             ).hasMatch(value)) {
-                              return 'El valor ingresado no es un correo electrónico';
+                              return AppString.instance.textValidateEmailRegex;
                             }
 
                             return null;
@@ -162,11 +166,12 @@ class _ComponentsRegister extends StatelessWidget {
                           obscureText: true,
                           onValidate: (value) {
                             if (value!.isEmpty) {
-                              return "Ingrese una contraseña valida";
+                              return AppString
+                                  .instance.textValidatePasswordIsEmpty;
                             }
 
                             if (value.length < 6) {
-                              return "La contraseña debe tener al menos 6 caracteres";
+                              return AppString.instance.textValidatePasswordMin;
                             }
 
                             return null;
