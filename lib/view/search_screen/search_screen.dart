@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/models/produc_with_favorite.dart';
 import 'package:food_app/res/components/components.dart';
 import 'package:provider/provider.dart';
 
 import 'package:food_app/data/response/status.dart';
-import 'package:food_app/models/product.dart';
 import 'package:food_app/res/res.dart';
 import 'package:food_app/routes/routes.dart';
 import 'package:food_app/view_models/search_view_model.dart';
@@ -17,10 +17,12 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late final SearchViewModel _viewModel;
+  late final TextEditingController _searchTextEditingController;
 
   @override
   void initState() {
     _viewModel = SearchViewModel();
+    _searchTextEditingController = TextEditingController();
     super.initState();
   }
 
@@ -87,6 +89,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         const Icon(Icons.search),
                         Flexible(
                           child: TextFormField(
+                            controller: _searchTextEditingController,
                             onChanged: (value) {
                               _viewModel.getSearchProductList(value);
                             },
@@ -141,7 +144,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           );
                         case Status.completed:
                           return CardSearchProduct(
+                            valueSearch: _searchTextEditingController.text,
                             products: value.searchProductList.data!,
+                            viewModel: _viewModel,
                           );
                         case Status.error:
                           return const Center(
@@ -172,11 +177,15 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
 class CardSearchProduct extends StatefulWidget {
-  final List<Products> products;
+  final List<ProductWithFavorite> products;
+  final SearchViewModel viewModel;
+  final String valueSearch;
 
   const CardSearchProduct({
     Key? key,
     required this.products,
+    required this.viewModel,
+    required this.valueSearch,
   }) : super(key: key);
 
   @override
@@ -200,7 +209,15 @@ class _CardSearchProductState extends State<CardSearchProduct> {
             image: product.image,
             name: product.name,
             price: product.price,
-            statusFavorite: false,
+            statusFavorite: product.status,
+            onPressed: () {
+              widget.viewModel.createOrUpdateFavorite(
+                status: !product.status,
+                favoriteId: product.favoriteId,
+                productId: product.productId,
+                valueSearch: widget.valueSearch,
+              );
+            },
           ),
         );
       },

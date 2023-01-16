@@ -18,15 +18,15 @@ class ProductWithFavorite {
     required this.profileId,
   });
 
-  final String? favoriteId;
+  final String favoriteId;
   final String categoryId;
   final String name;
   final String image;
   final String descripction;
   final double price;
-  final bool? status;
+  final bool status;
   final String productId;
-  final String? profileId;
+  final String profileId;
 
   factory ProductWithFavorite.fromMap(Map<String, dynamic> json) =>
       ProductWithFavorite(

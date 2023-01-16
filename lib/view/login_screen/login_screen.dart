@@ -86,7 +86,9 @@ class _ComponentLogin extends StatelessWidget {
       ),
     );
     isError = false;
-    return Container();
+    return Container(
+      color: AppColors.backgroundColor,
+    );
   }
 
   @override

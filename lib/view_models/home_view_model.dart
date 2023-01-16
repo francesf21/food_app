@@ -44,7 +44,7 @@ class HomeViewModel extends ChangeNotifier {
             ));
   }
 
-  void createOrInsertFavorite({
+  Future<void> createOrInsertFavorite({
     required String CategoryId,
     required String? favoriteId,
     required String productId,

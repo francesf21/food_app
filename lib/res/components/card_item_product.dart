@@ -245,7 +245,7 @@ class _CardItemProductState extends State<CardItemProduct> {
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.instance.errorbody,
-                        maxLines: 7,
+                        maxLines: 6,
                       ),
                     ),
                     Padding(

@@ -38,6 +38,7 @@ class _AppbarContainerState extends State<AppbarContainer> {
                 isDefault: false,
               );
             case Status.error:
+              value.getProfileApi();
               return const _AppBarElement(
                 isLoading: true,
                 isError: true,

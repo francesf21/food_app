@@ -6,9 +6,6 @@ List<Profiles> profilesFromMap(String str) =>
 Profiles profilesOfUserIdFromMap(String str) =>
     List<Profiles>.from(json.decode(str).map((x) => Profiles.fromMap(x))).first;
 
-String profilesToMap(List<Profiles> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
-
 class Profiles {
   final String id;
   final DateTime createdAt;
@@ -40,15 +37,4 @@ class Profiles {
         phoneUser: json["phone_user"],
         avatarUrl: json["avatar_url"],
       );
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-        "username": username,
-        "firstname": firstname,
-        "lastname": lastname,
-        "phone_user": phoneUser,
-        "avatar_url": avatarUrl,
-      };
 }

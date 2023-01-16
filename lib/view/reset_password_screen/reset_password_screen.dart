@@ -37,7 +37,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ((route) => false),
                 ),
               );
-              return Container();
+              return Container(
+                color: AppColors.backgroundColor,
+              );
             case Status.error:
               _isLoading = false;
               return _ComponentResetPassword(

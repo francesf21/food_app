@@ -36,10 +36,14 @@ class _SplashScreenState extends State<SplashScreen> {
             case Status.completed:
               if (value.statusSplash.data!) {
                 executeAfterBuild(RoutesName.home);
-                return Container();
+                return Container(
+                  color: AppColors.backgroundColor,
+                );
               } else {
                 executeAfterBuild(RoutesName.onboard);
-                return Container();
+                return Container(
+                  color: AppColors.backgroundColor,
+                );
               }
             case Status.loading:
               return const _ComponentSplash();
