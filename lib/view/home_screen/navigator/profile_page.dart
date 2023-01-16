@@ -75,28 +75,31 @@ class _ComponentProfile extends StatelessWidget {
         content: const Text("¿Estas seguro que deseas cerrar sesión?"),
         actions: <Widget>[
           TextButton(
-              child: const Text(
-                "Aceptar",
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                ),
+            child: const Text(
+              "Cancelar",
+              style: TextStyle(
+                color: AppColors.primaryColor,
               ),
-              onPressed: () {
-                viewModel.signOut();
-                Navigator.of(context).pushNamed(
-                  RoutesName.login,
-                );
-              }),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           TextButton(
-              child: const Text(
-                "Cancelar",
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                ),
+            child: const Text(
+              "Aceptar",
+              style: TextStyle(
+                color: AppColors.primaryColor,
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
+            ),
+            onPressed: () {
+              viewModel.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                RoutesName.login,
+                (route) => false,
+              );
+            },
+          ),
         ],
       ),
     );

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:food_app/data/supabase/supabase.dart';
 import 'package:food_app/models/models.dart';
+import 'package:food_app/models/produc_with_favorite.dart';
 import 'package:food_app/res/res.dart';
 import 'package:food_app/data/network/network_api_services.dart';
 
@@ -16,12 +20,18 @@ class HomeRepository {
     }
   }
 
-  Future<List<Products>> getProductOfCategoryId(String categoryId) async {
+  Future<List<ProductWithFavorite>> getProductWithFavorite({
+    required String categoryId,
+  }) async {
     try {
-      dynamic response = await _apiServices.getGetApiResponse(
-        "${AppUrl.productOfCategoryId}$categoryId",
+      final userId = supabase.auth.currentUser!.id;
+      final data = {"p_category_id": categoryId, "p_profile_id": userId};
+
+      dynamic response = await _apiServices.getPostApiResponse(
+        AppUrl.productWithFavorite,
+        json.encode(data),
       );
-      return response = productsFromMap(response);
+      return response = productWithFavoriteFromMap(response);
     } catch (e) {
       rethrow;
     }
