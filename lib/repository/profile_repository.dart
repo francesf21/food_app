@@ -67,7 +67,7 @@ class ProfileRepository {
     try {
       final user = supabase.auth.currentUser?.id ?? '';
       dynamic response = await _apiServices.getGetApiResponse(
-        "${AppUrl.profileOfUserId}${user}",
+        "${AppUrl.profileOfUserId}$user",
       );
       return response = profilesOfUserIdFromMap(response);
     } catch (e) {

@@ -92,8 +92,9 @@ class _PersonScreenState extends State<PersonScreen> {
                   avatarUrl: _avatarUrl ?? "",
                 );
                 Future.delayed(Duration.zero, () {
-                  Navigator.of(context).pushNamed(
+                  Navigator.of(context).pushNamedAndRemoveUntil(
                     RoutesName.home,
+                    (route) => false,
                   );
                 });
               }),

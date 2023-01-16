@@ -31,7 +31,7 @@ class CardProductList extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 height: 100,
-                width: 150,
+                width: 130,
                 decoration: const BoxDecoration(
                   color: Colors.transparent,
                 ),
@@ -51,13 +51,18 @@ class CardProductList extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Dimens.d6),
-                    child: Center(
+                  SizedBox(
+                    width: 190,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: Dimens.d8,
+                        right: Dimens.d8,
+                      ),
                       child: Text(
                         name,
+                        maxLines: 4,
                         overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: AppStyle.instance.bodyText,
                       ),
                     ),
